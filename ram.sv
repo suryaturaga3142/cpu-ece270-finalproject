@@ -1,4 +1,7 @@
 `default_nettype none
+
+`include "params.svh"
+
 `ifndef ram_guard
 `define ram_guard
 
@@ -7,10 +10,7 @@ Uses FPGA BRAM. Reads and writes to data 8 bits wide with bus width 8 bits.
 Prefers read enable over write to prevent conflict.
 */
 
-module ram #(
-    parameter DATA_WIDTH=8,
-    parameter BUS_WIDTH=8
-)   (
+module ram (
     input logic clk, rstn,
     input logic [BUS_WIDTH-1:0] addr_rd, addr_wr, 
     input logic [DATA_WIDTH-1:0] data_wr,

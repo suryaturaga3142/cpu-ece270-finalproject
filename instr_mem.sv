@@ -1,12 +1,11 @@
 `default_nettype none
+
+`include "params.svh"
+
 `ifndef instr_mem_guard
 `define instr_mem_guard
 
-module instr_mem #(
-    parameter BUS_WIDTH=8,
-    parameter DATA_WIDTH=8,
-    parameter OPCODE_WIDTH=16
-)   (
+module instr_mem (
     input logic [BUS_WIDTH-1:0] addr_instr,
     input logic en,
     output logic [OPCODE_WIDTH-1:0] opcode
