@@ -9,7 +9,7 @@ include "core.sv"
 include "alu.sv"
 include "RAM_wrapper.sv"
 
-module testbench (
+module cpu_wrapper (
   input logic [LINE_WIDTH-1:0] input_total,
   output logic [BUS_WIDTH-1:0] output_total
 );
