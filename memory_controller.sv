@@ -2,8 +2,8 @@
 
 module memory_controller(
     input  logic  clk,
-    input  logic  rst,
-    input  logic [2:0]  write_read,          
+    input  logic  rstn,
+    input  logic [1:0]  write_read,          
     input  logic [BUS_WIDTH-1:0]  addr,            
     input  logic [BUS_WIDTH-1:0]  write_data,      
     input  logic [BUS_WIDTH-1:0]  ram_dout, 
@@ -18,8 +18,8 @@ module memory_controller(
 
 memory_state curr_state, next_state; 
 
-always_ff @(posedge clk or posedge rst) begin
-    if(rst) begin
+always_ff @(posedge clk or negedge rstn) begin
+    if(!rstn) begin
         curr_state <= IDLE; 
     end else begin
         curr_state <= next_state; 
