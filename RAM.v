@@ -3,8 +3,8 @@
 *
 */
 
-module ram (din, write_en, waddr, wclk, raddr, rclk, dout);//512x8
- parameter addr_width = 9;
+module ram (din, write_en, waddr, wclk, raddr, rclk, dout);//256x8
+ parameter addr_width = 8;
  parameter data_width = 8;
  input [addr_width-1:0] waddr, raddr;
  input [data_width-1:0] din;

@@ -12,6 +12,7 @@ module sequencer (
     input logic clk, rstn, start, nxt_line, err,
     output SequencerState q
 );
+
 SequencerState nxt_q;
 always_ff @( posedge clk, negedge rstn ) begin : fflogic
     if (!rstn) begin
