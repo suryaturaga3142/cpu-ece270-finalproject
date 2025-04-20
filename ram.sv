@@ -1,7 +1,5 @@
 `default_nettype none
-
 `include "params.svh"
-
 `ifndef ram_guard
 `define ram_guard
 

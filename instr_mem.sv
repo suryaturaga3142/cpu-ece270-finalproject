@@ -1,7 +1,5 @@
 `default_nettype none
-
 `include "params.svh"
-
 `ifndef instr_mem_guard
 `define instr_mem_guard
 
@@ -12,7 +10,7 @@ module instr_mem (
 );
 
 logic [OPCODE_WIDTH-1:0] mem [2**BUS_WIDTH-1:0];
-//Define opcodes here
+//Define opcodes in header file only
 
 always_latch begin : assignOpcode
     if(en) begin
