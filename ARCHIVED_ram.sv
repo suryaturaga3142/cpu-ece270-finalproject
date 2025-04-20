@@ -15,6 +15,7 @@ module ram (
     input logic rd_en, wr_en,
     output logic [DATA_WIDTH-1:0] data_rd
 );
+
 logic [DATA_WIDTH-1:0] memory [2**BUS_WIDTH - 1:0];
 logic [DATA_WIDTH-1:0] nxt_data_rd;
 
