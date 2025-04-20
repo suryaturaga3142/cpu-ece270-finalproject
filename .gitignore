@@ -3,3 +3,5 @@ reg.c
 reg.h
 reg_tb.c
 .vscode/
+BRAM_interface.sv
+top.sv
