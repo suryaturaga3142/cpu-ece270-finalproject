@@ -38,10 +38,16 @@ module core (
     input logic [DATA_WIDTH-1:0] result,
     output logic alu_en
 );
-// Enable signals and registers for ip, ra, etc here. Eventually stack interaction too.
+assign err = 1'b0;
+assign instr_addr = line[31:24];
+assign addr_wr    = line[23:16]; //Hardcoding bc single cycle calculation
+assign addr1      = line[15: 8];
+assign addr2      = line[ 7: 0];
+assign data_wr    = result;      //Hardcoding bc single cycle calculation
+assign opcode     = opcode_alu;
 
-assign err=1'b0;
-    
+
+
 endmodule
 
 `endif

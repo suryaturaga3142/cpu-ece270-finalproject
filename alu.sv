@@ -30,7 +30,7 @@ always_ff @( posedge clk, negedge rstn ) begin : nxtStateassignment
 end
 
 always_comb begin : basicarith
-    if (|opcode) begin
+    if (~&opcode) begin
         err = 1'b0;
         calc_done = 1'b1;
         case (opcode[5:3])

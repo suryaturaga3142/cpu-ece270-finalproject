@@ -11,7 +11,7 @@ parameter NUM_LINES=4;     //Number of code lines to execute
 
 
 // States enum for sequencer
-typedef enum logic [2:0] { SRST, SREAD, SREG, SCALC, SWRITE, SFINISH, SERR } SequencerState;
+typedef enum logic [2:0] { SRST, SREAD, SLOAD1, SLOAD2, SCALC, SWRITE, SFINISH, SERR } SequencerState;
 
 // States enum for memory 
 typedef enum logic [2:0] {IDLE, WRITE, READ} memory_state;
