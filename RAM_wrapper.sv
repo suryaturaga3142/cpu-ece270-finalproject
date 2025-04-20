@@ -6,7 +6,6 @@ module RAM_wrapper(
     input logic rstn,
     input logic [BUS_WIDTH-1:0] addr_rd,
     input logic [BUS_WIDTH-1:0] addr_w, 
-    input logic [BUS_WIDTH-1:0] dread, 
     input logic [BUS_WIDTH-1:0] dwrite,
  
     output logic [BUS_WIDTH-1:0] dout, 
