@@ -10,11 +10,14 @@ module instr_mem (
 );
 
 logic [OPCODE_WIDTH-1:0] mem [2**BUS_WIDTH-1:0];
-//Define opcodes in header file only
+//Define opcodes here
+assign mem[0] = 8'h00;
+assign mem[1] = 8'h00;
+assign mem[2] = 8'h00;
 
 always_latch begin : assignOpcode
     if(en) begin
-        opcode = mem[addr_instr];
+        opcode = addr_instr; //mem[addr_instr];
     end
 end
 

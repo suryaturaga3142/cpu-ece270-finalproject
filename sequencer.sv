@@ -9,7 +9,7 @@ Stays in SCALC to allow multicycle operations.
 */
 
 module sequencer (
-    input logic clk, rstn, start, nxt_line, err,
+    input logic clk, rstn, start, nxt_line, err, finish,
     output SequencerState q
 );
 SequencerState nxt_q;
@@ -28,7 +28,7 @@ always_comb begin : nextStateLogic
         SREAD:   nxt_q = SREG;
         SREG:    nxt_q = SCALC;
         SCALC:   nxt_q = (nxt_instr) ? SWRITE : SCALC;
-        SWRITE:  nxt_q = SFINISH;
+        SWRITE:  nxt_q = (finish) ? SFINISH : SREAD;
         default: nxt_q = q; //SFINISH -> SFINISH, SERR -> SERR
     endcase
 end
