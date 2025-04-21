@@ -12,7 +12,8 @@ module core (
     input logic clk, rstn, 
 
     /* Sequencer IO */
-    input SequencerState q, output logic err,
+    input SequencerState q, 
+    output logic err,
 
     /* Line Memory IO */
     input logic [LINE_WIDTH-1:0] line,
