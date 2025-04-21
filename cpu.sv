@@ -37,13 +37,14 @@ logic [LINE_WIDTH-1:0] output_line;
 logic alu_en; 
 logic [DATA_WIDTH-1:0] val1, val2; 
 logic [BUS_WIDTH-1:0] addr1, addr2; 
-logic [OPCODE_WIDTH-1:0] opcode; // Output of instruction memory 
+logic [OPCODE_WIDTH-1:0] opcode_alu; // Output of instruction memory 
 logic [DATA_WIDTH-1:0] result; 
 logic calc_done;
 
 // Instruction internal memory signals
 logic [BUS_WIDTH-1:0] addr_instr; 
 logic instr_mem_en;
+logic [OPCODE_WIDTH-1:0] opcode_instr;
 
 // RAM memory internal signals
 logic [1:0] read_write_en;
@@ -78,7 +79,7 @@ alu cpu_alu(
     .value2     (val2),
     .addr1      (addr1),
     .addr2      (addr2),
-    .opcode     (opcode), 
+    .opcode     (opcode_alu), 
     .result     (result),
     .calc_done  (calc_done), 
     .err        (err), 
@@ -88,7 +89,7 @@ alu cpu_alu(
 instr_mem instruction_memory(
     .addr_instr (addr_instr),
     .en        (instr_mem_en), 
-    .opcode    (opcode)
+    .opcode    (opcode_instr)
 );
 
 RAM_wrapper ram_memory(
@@ -106,11 +107,10 @@ core cpu_core(
     .clk            (clk), 
     .rstn           (rstn), 
     .q              (q),
-    .err            (err),
     .line           (output_line), 
     .ip             (ip), 
     .line_mem_en    (line_mem_en),
-    .opcode         (opcode),
+    .opcode         (opcode_instr),
     .instr_addr     (addr_instr), 
     .instr_mem_en   (instr_mem_en), 
     .ram_busy       (busy),
@@ -120,7 +120,7 @@ core cpu_core(
     .addr_wr        (addr_wr),
     .ram_wr_en      (read_write_en[1]),
     .ram_rd_en      (read_write_en[0]),
-    .opcode_alu     (opcode), 
+    .opcode_alu     (opcode_alu), 
     .value1         (val1),
     .value2         (val2),
     .addr1          (addr1), 

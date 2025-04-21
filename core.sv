@@ -12,7 +12,7 @@ module core (
     input logic clk, rstn, 
 
     /* Sequencer IO */
-    input SequencerState q, output logic err,
+    input SequencerState q,
 
     /* Line Memory IO */
     input logic [LINE_WIDTH-1:0] line,
@@ -39,7 +39,6 @@ module core (
     output logic alu_en
 );
 // Hardwiring section. Ignoring ram_busy from RAM
-assign err = 1'b0;
 assign instr_addr = line[31:24];
 assign addr_wr    = line[23:16]; //Hardcoding bc single cycle calculation
 assign addr1      = line[15: 8];
@@ -51,12 +50,12 @@ logic [DATA_WIDTH-1:0] nxt_value1, nxt_value2;
 logic [BUS_WIDTH-1:0] nxt_addr_rd;
 logic [IP_WIDTH-1:0] nxt_ip;
 logic [4:0] enables, nxt_enables;
-assign enables = {line_mem_en, instr_mem_en, ram_rd_en, ram_wr_en, alu_en};
+assign {line_mem_en, instr_mem_en, ram_rd_en, ram_wr_en, alu_en} = enables;
 
 always_ff @( posedge clk, negedge rstn ) begin : nextStateAssignment
     //opcode_alu <= opcode;
     if (!rstn) begin
-        enables <= {1'b0,1'b0,1'b0,1'b0,1'b0};
+        enables <= 5'b00000;
         value1 <= 8'h00;
         value2 <= 8'h00;
         addr_rd <= 8'h00;
