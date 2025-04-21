@@ -1,0 +1,119 @@
+`include "params.svh"
+
+module cpu(
+    input logic clk, 
+    input logic start, 
+    input logic rstn
+);
+
+// Synchronizer internal signals
+logic nxt_line; 
+SequencerState q; 
+logic error, finish;  
+
+//line memory internal signals
+logic line_memory_enable; 
+logic [IP_WIDTH-1:0] ip; 
+logic [LINE_WIDTH-1:0] output_line; 
+
+//ALU internal signals
+logic alu_enable; 
+logic [DATA_WIDTH-1:0] val1, val2; 
+logic [BUS_WIDTH-1:0] addr1, addr2; 
+logic [OPCODE_WIDTH-1:0] opcode; // Output of instruction memory 
+logic [DATA_WIDTH-1:0] result; 
+logic calc_done, err, finish; 
+
+// Instruction internal memory signals
+logic [BUS_WIDTH-1:0] addr_instr; 
+logic instruction_mem_en; 
+
+//RAM memory internal signals
+logic [1:0] read_write_en;
+logic [BUS_WIDTH-1:0] addr_rd;
+logic [BUS_WIDTH-1:0] addr_w; 
+logic [DATA_WIDTH-1:0] dwrite;
+ 
+logic [DATA_WIDTH-1:0] dout; 
+logic busy; 
+
+
+sequencer synchronizer(
+    .clk        (clk), 
+    .rstn       (rstn), 
+    .start      (start), 
+    .nxt_line   (nxt_line), 
+    .err        (error), 
+    .finish     (finish)       
+    .q          (q)
+);
+
+line_mem line_memory(
+    .en    (line_memory_enable), 
+    .ip    (ip),
+    .line  (output_line)
+); 
+
+alu cpu_alu(
+    .clk        (clk), 
+    .rstn       (rstn), 
+    .en         (alu_enable), 
+    .value1     (val1), 
+    .value2     (val2),
+    .addr1      (addr1),
+    .addr2      (addr2),
+    .opcode     (opcode), 
+    .result     (result),
+    .calc_done  (calc_done), 
+    .err        (err), 
+    .finish     (finish)
+); 
+
+instr_mem instruction_memory(
+    .addr_inst (addr_instr),
+    .en        (instruction_mem_en), 
+    .opcode    (opcode)
+);
+
+RAM_wrapper ram_memory(
+    .en         (read_write_en)
+    .clk        (clk), 
+    .rstn       (rstn), 
+    .addr_rd    (addr_rd), 
+    .addr_w     (addr_w), 
+    .dwrite     (dwrite), 
+    .dout       (dout),
+    .busy       (busy)
+); 
+
+core cpu_core(
+    .clk            (clk), 
+    .rstn           (rstn), 
+    .q              (q),
+    .err            (error),
+    .line           (output_line), 
+    .ip             (ip), 
+    .line_mem_en    (line_memory_enable),
+    .opcode         (opcode),
+    .instr_addr     (addr_instr), 
+    .instr_mem_en   (instruction_mem_en), 
+    .ram_busy       (busy),
+    .data_rd        (dout), 
+    .data_wr        (dwrite), 
+    .addr_rd        (addr_rd), 
+    .addr_wr        (addr_w),
+    .ram_wr_en      (read_write_en[1]),
+    .ram_rd_en      (read_write_en[0]),
+    .opcode_alu     (opcode), 
+    .value1         (val1),
+    .value2         (val2),
+    .addr1          (addr1), 
+    .addr2          (addr2),
+    .result         (result), 
+    .alu_en         (alu_enable)
+); 
+
+
+endmodule
+
+
