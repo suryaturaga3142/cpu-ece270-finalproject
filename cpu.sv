@@ -22,7 +22,7 @@ logic [DATA_WIDTH-1:0] val1, val2;
 logic [BUS_WIDTH-1:0] addr1, addr2; 
 logic [OPCODE_WIDTH-1:0] opcode; // Output of instruction memory 
 logic [DATA_WIDTH-1:0] result; 
-logic calc_done, err, finish; 
+logic calc_done;
 
 // Instruction internal memory signals
 logic [BUS_WIDTH-1:0] addr_instr; 
@@ -44,7 +44,7 @@ sequencer synchronizer(
     .start      (start), 
     .nxt_line   (nxt_line), 
     .err        (error), 
-    .finish     (finish)       
+    .finish     (finish),       
     .q          (q)
 );
 
@@ -65,18 +65,18 @@ alu cpu_alu(
     .opcode     (opcode), 
     .result     (result),
     .calc_done  (calc_done), 
-    .err        (err), 
+    .err        (error), 
     .finish     (finish)
 ); 
 
 instr_mem instruction_memory(
-    .addr_inst (addr_instr),
+    .addr_instr (addr_instr),
     .en        (instruction_mem_en), 
     .opcode    (opcode)
 );
 
 RAM_wrapper ram_memory(
-    .en         (read_write_en)
+    .en         (read_write_en),
     .clk        (clk), 
     .rstn       (rstn), 
     .addr_rd    (addr_rd), 
