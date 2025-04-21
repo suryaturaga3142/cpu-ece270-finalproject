@@ -1,4 +1,7 @@
+`default_nettype none
 `include "params.svh"
+`ifndef ram_wrapper_guard
+`define ram_wrapper_guard
 
 module RAM_wrapper(
     input logic [1:0] en, 
@@ -52,6 +55,6 @@ ram bram(
     .dout       (ram_dout)
 );
 
-
-
 endmodule
+
+`endif

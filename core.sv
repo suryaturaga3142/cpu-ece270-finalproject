@@ -71,24 +71,20 @@ end
 
 always_comb begin : enableControl
     case (q)
-        SRST  : nxt_enables = 5'b10000;
-        SREAD : nxt_enables = 5'b01100;
-        SLOAD1: nxt_enables = 5'b00100;
-        SLOAD2: nxt_enables = 5'b00001;
-        SCALC : nxt_enables = 5'b00010;
-        SWRITE: nxt_enables = 5'b10000;
-        default:nxt_enables = 5'b00000;
+        SRST  : nxt_enables = 5'b10000; //line_mem
+        SREAD : nxt_enables = 5'b01100; //instr_mem, ram_rd
+        SLOAD1: nxt_enables = 5'b00100; //ram_rd
+        SLOAD2: nxt_enables = 5'b00100; //ram_rd (optional)
+        SCALC : nxt_enables = 5'b00001; //alu
+        SWRITE: nxt_enables = 5'b10010; //line_mem, ram_wr
+        default:nxt_enables = 5'b00000; //off
     endcase
 end
 
-always_comb begin : dataControl //make the case centered around the vars instead, simpler
-    case (q)
-        SREAD: 
-        SLOAD1: 
-        SLOAD2: 
-        default: 
-    endcase
-end
+assign nxt_value1 = (q == SLOAD1) ? data_rd : value1;
+assign nxt_value2 = (q == SLOAD2 | SCALC) ? data_rd : value2;
+assign nxt_addr_rd = (q == SREAD) ? addr1 : (q == SLOAD1) ? addr2 : addr_rd;
+assign nxt_ip = (q == SCALC) ? ip + 1 : ip;
 
 endmodule
 

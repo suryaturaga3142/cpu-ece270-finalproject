@@ -1,4 +1,7 @@
+`default_nettype none
 `include "params.svh"
+`ifndef memory_controller_guard
+`define memory_controller_guard
 
 module memory_controller(
     input  logic  clk,
@@ -59,3 +62,4 @@ assign busy = (curr_state != IDLE);
 
 endmodule 
 
+`endif
