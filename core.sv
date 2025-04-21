@@ -56,7 +56,7 @@ assign enables = {line_mem_en, instr_mem_en, ram_rd_en, ram_wr_en, alu_en};
 always_ff @( posedge clk, negedge rstn ) begin : nextStateAssignment
     //opcode_alu <= opcode;
     if (!rstn) begin
-        enables <= 5'b00000;
+        enables <= {1'b0,1'b0,1'b0,1'b0,1'b0};
         value1 <= 8'h00;
         value2 <= 8'h00;
         addr_rd <= 8'h00;
