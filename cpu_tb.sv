@@ -14,9 +14,9 @@ initial clk = 1'b0;
 always #5 clk = ~clk;
 
 initial begin : testing
-    rstn = 1'b1;
-    start = 1'b0;
-    #5 $finish;
+    {rstn, start} = 2'b00;
+    #5 {rstn, start} = 2'b11;
+    #15 start = 1'b0;
 end
 
 initial begin
@@ -25,7 +25,7 @@ end
 
 initial begin
     $dumpfile("cpu_tb.vcd");
-    $dumpvars(1, cpu_tb);
+    $dumpvars(0, cpu_tb);
 end
 
 endmodule
