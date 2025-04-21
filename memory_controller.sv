@@ -3,6 +3,10 @@
 `ifndef memory_controller_guard
 `define memory_controller_guard
 
+/*
+Memory controller to allow core to interact with RAM
+*/
+
 module memory_controller(
     input  logic  clk,
     input  logic  rstn,
@@ -21,7 +25,7 @@ module memory_controller(
 
 memory_state curr_state, next_state; 
 
-always_ff @(posedge clk or negedge rstn) begin
+always_ff @(posedge clk or negedge rstn) begin : nxtStateAssignment
     if(!rstn) begin
         curr_state <= IDLE; 
     end else begin
@@ -29,7 +33,7 @@ always_ff @(posedge clk or negedge rstn) begin
     end 
 end
 
-always_comb begin
+always_comb begin : nxtStateLogic
     case(curr_state) 
         IDLE: begin
             if(write_read[1] == 1'b1 && write_read[0] == 1'b0) begin
@@ -55,10 +59,6 @@ assign raddr = addr;
 assign din = write_data; 
 assign read_data = (curr_state == READ) ? ram_dout : '0; 
 assign busy = (curr_state != IDLE); 
-
-
-
-
 
 endmodule 
 

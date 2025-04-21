@@ -14,7 +14,7 @@ module sequencer (
 );
 
 SequencerState nxt_q;
-always_ff @( posedge clk, negedge rstn ) begin : fflogic
+always_ff @( posedge clk, negedge rstn ) begin : nxtStateAssignment
     if (!rstn) begin
         q <= SRST;
     end else if (err) begin
@@ -23,13 +23,13 @@ always_ff @( posedge clk, negedge rstn ) begin : fflogic
         q <= nxt_q;
     end
 end
-always_comb begin : nextStateLogic
+always_comb begin : nxtStateLogic
     case (q)
         SRST:    nxt_q = (start) ? SREAD : SRST;
         SREAD:   nxt_q = SLOAD1;
         SLOAD1:  nxt_q = SLOAD2;
         SLOAD2:  nxt_q = SCALC;
-        SCALC:   nxt_q = (finish) ? SFINISH : (nxt_instr) ? SWRITE : SCALC;
+        SCALC:   nxt_q = (finish) ? SFINISH : (nxt_line) ? SWRITE : SCALC;
         SWRITE:  nxt_q = SREAD;
         default: nxt_q = q; //SFINISH -> SFINISH, SERR -> SERR
     endcase

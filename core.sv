@@ -45,31 +45,32 @@ assign addr_wr    = line[23:16]; //Hardcoding bc single cycle calculation
 assign addr1      = line[15: 8];
 assign addr2      = line[ 7: 0];
 assign data_wr    = result;      //Hardcoding bc single cycle calculation
-assign opcode     = opcode_alu;
+//assign opcode_alu = opcode;
 
 logic [DATA_WIDTH-1:0] nxt_value1, nxt_value2;
 logic [BUS_WIDTH-1:0] nxt_addr_rd;
 logic [IP_WIDTH-1:0] nxt_ip;
-logic enables [4:0], nxt_enables;
+logic [4:0] enables, nxt_enables;
 assign enables = {line_mem_en, instr_mem_en, ram_rd_en, ram_wr_en, alu_en};
 
-always_ff @( posedge clk, negedge rstn ) begin : enableAssignment
+always_ff @( posedge clk, negedge rstn ) begin : nextStateAssignment
+    opcode_alu <= opcode;
     if (!rstn) begin
         enables <= 5'b00000;
-        value1 <= DATA_WIDTH'h00;
-        value2 <= DATA_WIDTH'h00;
-        addr_rd <= BUS_WIDTH'h00;
-        ip <= IP_WIDTH'h00;
+        value1 <= 8'h00;
+        value2 <= 8'h00;
+        addr_rd <= 8'h00;
+        ip <= 8'h00;
     end else begin
         enables <= nxt_enables;
         value1 <= nxt_value1;
         value2 <= nxt_value2;
         addr_rd <= nxt_addr_rd;
-        ip <= nxt_ip;
+        ip <= nxt_ip; //Move this to ALU for control
     end
 end
 
-always_comb begin : enableControl
+always_comb begin : nextStateLogic
     case (q)
         SRST  : nxt_enables = 5'b10000; //line_mem
         SREAD : nxt_enables = 5'b01100; //instr_mem, ram_rd
@@ -81,10 +82,11 @@ always_comb begin : enableControl
     endcase
 end
 
+// nextStateLogic
 assign nxt_value1 = (q == SLOAD1) ? data_rd : value1;
-assign nxt_value2 = (q == SLOAD2 | SCALC) ? data_rd : value2;
+assign nxt_value2 = (q == SLOAD2 || q == SCALC) ? data_rd : value2;
 assign nxt_addr_rd = (q == SREAD) ? addr1 : (q == SLOAD1) ? addr2 : addr_rd;
-assign nxt_ip = (q == SCALC) ? ip + 1 : ip;
+assign nxt_ip = (q == SCALC) ? ip + 1 : ip; //Move this to ALU for control
 
 endmodule
 

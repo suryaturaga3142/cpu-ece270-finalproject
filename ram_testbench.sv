@@ -1,8 +1,6 @@
 `timescale 1ns/1ps
 `include "params.svh"
 
-
-
 module ram_testbench;
 
 logic clk; 
@@ -13,10 +11,7 @@ logic write_en;
 logic [BUS_WIDTH-1:0] waddr, raddr; 
 logic [DATA_WIDTH-1:0] din, dout; 
 
-ram #(
-   .addr_width(BUS_WIDTH),
-   .data_width(DATA_WIDTH)
-) dut (
+ram dut (
    .din      (din),
    .write_en (write_en),
    .waddr    (waddr),

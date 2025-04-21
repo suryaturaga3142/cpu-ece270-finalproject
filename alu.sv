@@ -6,6 +6,12 @@
 /*
 ALU module to handle all calculations. Registers and flags are loaded in SREAD state.
 All calcs done in SCALC state, outputs result when ready w/ multicycle operations.
+opcode[7:0] breakdown:
+7   - Finish signal
+6   - 0=Arithmetic, 1=Control
+5:2 - Function choose
+1   - 0 uses value2, 1 uses &value2=addr2
+0   - 0 uses value1, 1 uses &value1=addr1
 */
 
 module alu (
@@ -19,9 +25,9 @@ module alu (
 logic [DATA_WIDTH-1:0] op1, op2, nxt_result;
 assign op1 = opcode[0] ? addr1 : value1;
 assign op2 = opcode[1] ? addr2 : value2;
-assign finish = &opcode;
+assign finish = opcode[7];
 
-always_ff @( posedge clk, negedge rstn ) begin : nxtStateassignment
+always_ff @( posedge clk, negedge rstn ) begin : nxtStateAssignment
     if (!rstn) begin
         result <= 0;
     end else begin
@@ -29,7 +35,7 @@ always_ff @( posedge clk, negedge rstn ) begin : nxtStateassignment
     end
 end
 
-always_comb begin : basicarith
+always_comb begin : arithmeticAssignment
     if (~finish) begin
         err = 1'b0;
         calc_done = 1'b1;
