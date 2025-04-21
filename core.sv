@@ -81,7 +81,7 @@ always_comb begin : enableControl
     endcase
 end
 
-always_comb begin : dataControl
+always_comb begin : dataControl //make the case centered around the vars instead, simpler
     case (q)
         SREAD: 
         SLOAD1: 
