@@ -25,6 +25,8 @@ module memory_controller(
 
 memory_state curr_state, next_state; 
 
+// Write when 10, read when 01
+
 always_ff @(posedge clk or negedge rstn) begin : nxtStateAssignment
     if(!rstn) begin
         curr_state <= IDLE; 
