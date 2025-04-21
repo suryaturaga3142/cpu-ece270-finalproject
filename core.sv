@@ -54,19 +54,21 @@ logic [4:0] enables, nxt_enables;
 assign enables = {line_mem_en, instr_mem_en, ram_rd_en, ram_wr_en, alu_en};
 
 always_ff @( posedge clk, negedge rstn ) begin : nextStateAssignment
-    opcode_alu <= opcode;
+    //opcode_alu <= opcode;
     if (!rstn) begin
         enables <= 5'b00000;
         value1 <= 8'h00;
         value2 <= 8'h00;
         addr_rd <= 8'h00;
         ip <= 8'h00;
+        opcode_alu <= 8'h00;
     end else begin
         enables <= nxt_enables;
         value1 <= nxt_value1;
         value2 <= nxt_value2;
         addr_rd <= nxt_addr_rd;
         ip <= nxt_ip; //Move this to ALU for control
+        opcode_alu <= opcode;
     end
 end
 

@@ -1,5 +1,13 @@
 `default_nettype none
 `include "params.svh"
+`include "sequencer.sv"
+`include "line_mem.sv"
+`include "alu.sv"
+`include "instr_mem.sv"
+`include "memory_controller.sv"
+`include "ram.sv"
+`include "RAM_wrapper.sv"
+`include "core.sv"
 `ifndef cpu_guard
 `define cpu_guard
 
