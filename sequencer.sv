@@ -26,10 +26,11 @@ end
 always_comb begin : nextStateLogic
     case (q)
         SRST:    nxt_q = (start) ? SREAD : SRST;
-        SREAD:   nxt_q = SREG;
-        SREG:    nxt_q = SCALC;
-        SCALC:   nxt_q = (nxt_instr) ? SWRITE : SCALC;
-        SWRITE:  nxt_q = (finish) ? SFINISH : SREAD;
+        SREAD:   nxt_q = SLOAD1;
+        SLOAD1:  nxt_q = SLOAD2;
+        SLOAD2:  nxt_q = SCALC;
+        SCALC:   nxt_q = (finish) ? SFINISH : (nxt_instr) ? SWRITE : SCALC;
+        SWRITE:  nxt_q = SREAD;
         default: nxt_q = q; //SFINISH -> SFINISH, SERR -> SERR
     endcase
 end

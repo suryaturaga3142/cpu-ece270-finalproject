@@ -3,6 +3,10 @@
 `ifndef instr_mem_guard
 `define instr_mem_guard
 
+/*
+Instruction memory to store all opcodes. Send in address and get opcode.
+*/
+
 module instr_mem (
     input logic [BUS_WIDTH-1:0] addr_instr,
     input logic en,
