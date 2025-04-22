@@ -24,7 +24,7 @@ module cpu(
 );
 
 // Synchronizer internal signals
-logic nxt_line; 
+//logic nxt_line; 
 SequencerState q; 
 logic err, finish;  
 
@@ -59,7 +59,7 @@ sequencer synchronizer(
     .clk        (clk), 
     .rstn       (rstn), 
     .start      (start), 
-    .nxt_line   (nxt_line), 
+    .nxt_line   (calc_done), 
     .err        (err), 
     .finish     (finish),       
     .q          (q)

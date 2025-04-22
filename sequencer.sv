@@ -30,7 +30,8 @@ always_comb begin : nxtStateLogic
         SLOAD1:  nxt_q = SLOAD2;
         SLOAD2:  nxt_q = SCALC;
         SCALC:   nxt_q = (finish === 1'b1) ? SFINISH : (nxt_line === 1'b1) ? SWRITE : SCALC;
-        SWRITE:  nxt_q = SREAD;
+        SWRITE:  nxt_q = SNXTLINE;
+        SNXTLINE:nxt_q = SREAD;
         default: nxt_q = q; //SFINISH -> SFINISH, SERR -> SERR
     endcase
 end

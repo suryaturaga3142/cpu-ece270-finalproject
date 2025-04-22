@@ -23,22 +23,26 @@ module alu (
     output logic calc_done, err, finish
 );
 logic [DATA_WIDTH-1:0] op1, op2, nxt_result;
+logic nxt_calc_done;
 assign op1 = opcode[0] ? addr1 : value1;
 assign op2 = opcode[1] ? addr2 : value2;
 assign finish = opcode[7];
 
+assign err = 1'b0;
+
 always_ff @( posedge clk, negedge rstn ) begin : nxtStateAssignment
     if (!rstn) begin
-        result <= 0;
+        result <= '0;
+        calc_done <= 1'b0;
     end else begin
         result <= en ? nxt_result : result;
+        calc_done <= en ? nxt_calc_done : calc_done;
     end
 end
 
 always_comb begin : arithmeticAssignment
     if (~finish) begin
-        err = 1'b0;
-        calc_done = 1'b1;
+        nxt_calc_done = 1'b1;
         case (opcode[5:3])
             3'b000: nxt_result = opcode[2] ?   op1 ^ op2  : op1 + op2;
             3'b001: nxt_result = opcode[2] ?   op1 | op2  : op1 - op2;
@@ -49,8 +53,7 @@ always_comb begin : arithmeticAssignment
         endcase
     end else begin
         nxt_result = result;
-        err = 1'b0;
-        calc_done = 1'b1;
+        nxt_calc_done = 1'b1;
     end
 end
 

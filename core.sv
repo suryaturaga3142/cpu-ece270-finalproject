@@ -74,11 +74,12 @@ end
 always_comb begin : nextStateLogic
     case (q)
         SRST  : nxt_enables = 5'b10000; //line_mem
-        SREAD : nxt_enables = 5'b01100; //instr_mem, ram_rd
+        SREAD : nxt_enables = 5'b01100; //ram_rd
         SLOAD1: nxt_enables = 5'b00100; //ram_rd
-        SLOAD2: nxt_enables = 5'b00100; //ram_rd (optional)
+        SLOAD2: nxt_enables = 5'b00101; //ram_rd (optional)
         SCALC : nxt_enables = 5'b00001; //alu
-        SWRITE: nxt_enables = 5'b10010; //line_mem, ram_wr
+        SWRITE: nxt_enables = 5'b00010; //ram_wr
+        SNXTLINE:nxt_enables= 5'b10000; //line_mem
         default:nxt_enables = 5'b00000; //off
     endcase
 end
@@ -87,7 +88,7 @@ end
 assign nxt_value1 = (q == SLOAD1) ? data_rd : value1;
 assign nxt_value2 = (q == SLOAD2 || q == SCALC) ? data_rd : value2;
 assign nxt_addr_rd = (q == SREAD) ? addr1 : (q == SLOAD1) ? addr2 : addr_rd;
-assign nxt_ip = (q == SCALC) ? ip + 1 : ip; //Move this to ALU for control
+assign nxt_ip = (q == SWRITE) ? ip + 1 : ip; //Move this to ALU for control
 
 endmodule
 
