@@ -15,9 +15,9 @@ module line_mem (
 );
 
 logic [LINE_WIDTH-1:0] code [(1<<BUS_WIDTH)-1:0];
-assign code[0] = 32'h03000102;
-assign code[1] = 32'hffffffff;
-assign code[2] = 32'h00000000;
+assign code[0] = 32'h03002336;
+assign code[1] = 32'h02000011;
+assign code[2] = 32'hf0000000;
 assign code[3] = 32'h00000000;
 
 assign code[NUM_LINES] = 32'hffffffff;

@@ -4,9 +4,10 @@
 `include "line_mem.sv"
 `include "alu.sv"
 `include "instr_mem.sv"
-`include "memory_controller.sv"
-`include "ram.sv"
-`include "RAM_wrapper.sv"
+//`include "memory_controller.sv"
+//`include "ram.sv"
+//`include "RAM_wrapper.sv"
+`include "ARCHIVED_ram.sv"
 `include "core.sv"
 `ifndef cpu_guard
 `define cpu_guard
@@ -26,7 +27,7 @@ module cpu(
 // Synchronizer internal signals
 //logic nxt_line; 
 SequencerState q; 
-logic err, finish;  
+logic err, finish;
 
 // Line memory internal signals
 logic line_mem_en;
@@ -50,8 +51,8 @@ logic [OPCODE_WIDTH-1:0] opcode_instr;
 logic [1:0] read_write_en;
 logic [BUS_WIDTH-1:0] addr_rd;
 logic [BUS_WIDTH-1:0] addr_wr;
-logic [DATA_WIDTH-1:0] dwrite;
-logic [DATA_WIDTH-1:0] dout; 
+logic [DATA_WIDTH-1:0] data_wr;
+logic [DATA_WIDTH-1:0] data_rd;
 logic busy; //Ignored by core due to synchronizer
 
 
@@ -61,7 +62,7 @@ sequencer synchronizer(
     .start      (start), 
     .nxt_line   (calc_done), 
     .err        (err), 
-    .finish     (finish),       
+    .finish     (finish),
     .q          (q)
 );
 
@@ -84,14 +85,14 @@ alu cpu_alu(
     .calc_done  (calc_done), 
     .err        (err), 
     .finish     (finish)
-); 
+);
 
 instr_mem instruction_memory(
     .addr_instr (addr_instr),
-    .en        (instr_mem_en), 
-    .opcode    (opcode_instr)
+    .en         (instr_mem_en), 
+    .opcode     (opcode_instr)
 );
-
+/*
 RAM_wrapper ram_memory(
     .en         (read_write_en),
     .clk        (clk), 
@@ -102,6 +103,16 @@ RAM_wrapper ram_memory(
     .dout       (dout),
     .busy       (busy)
 ); 
+*/
+ARCHIVED_ram ram_memory(
+    .clk       (clk),
+    .addr_rd   (addr_rd),
+    .addr_wr   (addr_wr),
+    .rd_en     (read_write_en[0]),
+    .wr_en     (read_write_en[1]),
+    .data_wr   (data_wr),
+    .data_rd   (data_rd)
+);
 
 core cpu_core(
     .clk            (clk), 
@@ -114,8 +125,8 @@ core cpu_core(
     .instr_addr     (addr_instr), 
     .instr_mem_en   (instr_mem_en), 
     .ram_busy       (busy),
-    .data_rd        (dout), 
-    .data_wr        (dwrite), 
+    .data_rd        (data_rd), 
+    .data_wr        (data_wr), 
     .addr_rd        (addr_rd), 
     .addr_wr        (addr_wr),
     .ram_wr_en      (read_write_en[1]),

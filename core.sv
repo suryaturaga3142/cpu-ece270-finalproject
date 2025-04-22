@@ -73,21 +73,22 @@ end
 
 always_comb begin : nextStateLogic
     case (q)
-        SRST  : nxt_enables = 5'b10000; //line_mem
-        SREAD : nxt_enables = 5'b01100; //ram_rd
+        SRST:   nxt_enables = 5'b10000; //line_mem
+        SREAD:  nxt_enables = 5'b01100; //instr_mem, ram_rd
         SLOAD1: nxt_enables = 5'b00100; //ram_rd
-        SLOAD2: nxt_enables = 5'b00101; //ram_rd (optional)
-        SCALC : nxt_enables = 5'b00001; //alu
+        SLOAD2: nxt_enables = 5'b00100; //ram_rd
+        SLOAD3: nxt_enables = 5'b00101; //ram_rd
+        SCALC:  nxt_enables = 5'b00101; //ram_rd, alu
         SWRITE: nxt_enables = 5'b00010; //ram_wr
-        SNXTLINE:nxt_enables= 5'b10000; //line_mem
+        SNXT:   nxt_enables= 5'b10000; //line_mem
         default:nxt_enables = 5'b00000; //off
     endcase
 end
 
 // nextStateLogic
-assign nxt_value1 = (q == SLOAD1) ? data_rd : value1;
-assign nxt_value2 = (q == SLOAD2 || q == SCALC) ? data_rd : value2;
-assign nxt_addr_rd = (q == SREAD) ? addr1 : (q == SLOAD1) ? addr2 : addr_rd;
+assign nxt_value1 = (q == SLOAD1 || q == SLOAD2) ? data_rd : value1;
+assign nxt_value2 = (q == SLOAD3 || q == SCALC) ? data_rd : value2;
+assign nxt_addr_rd = (q == SREAD) ? addr1 : (q == SLOAD2) ? addr2 : addr_rd;
 assign nxt_ip = (q == SWRITE) ? ip + 1 : ip; //Move this to ALU for control
 
 endmodule
