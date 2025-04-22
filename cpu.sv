@@ -18,7 +18,8 @@ User inputs trigger the synchronizer module.
 module cpu(
     input logic clk, 
     input logic start, 
-    input logic rstn
+    input logic rstn,
+    output logic [DATA_WIDTH-1:0] output_data0x00, output_data0x01
 );
 
 // Synchronizer internal signals
@@ -37,8 +38,8 @@ logic [DATA_WIDTH-1:0] val1, val2;
 logic [BUS_WIDTH-1:0] addr1, addr2; 
 logic [OPCODE_WIDTH-1:0] opcode_alu; // Output of instruction memory 
 logic [DATA_WIDTH-1:0] result; 
-logic [IP_WIDTH-1:0] nxt_ip;
-logic calc_done;
+//logic [IP_WIDTH-1:0] nxt_ip;
+logic calc_done, update_ip;
 
 // Instruction internal memory signals
 logic [BUS_WIDTH-1:0] addr_instr; 
@@ -81,7 +82,8 @@ alu cpu_alu(
     .addr2        (addr2),
     .opcode       (opcode_alu), 
     .result       (result),
-    .nxt_ip       (nxt_ip),
+    //.nxt_ip       (nxt_ip),
+    .update_ip    (update_ip),
     .calc_done    (calc_done), 
     .err          (err), 
     .finish       (finish)
@@ -94,13 +96,15 @@ instr_mem instruction_memory(
 );
 
 ram ram_memory(
-    .clk       (clk),
-    .addr_rd   (addr_rd),
-    .addr_wr   (addr_wr),
-    .rd_en     (read_write_en[0]),
-    .wr_en     (read_write_en[1]),
-    .data_wr   (data_wr),
-    .data_rd   (data_rd)
+    .clk         (clk),
+    .addr_rd     (addr_rd),
+    .addr_wr     (addr_wr),
+    .rd_en       (read_write_en[0]),
+    .wr_en       (read_write_en[1]),
+    .data_wr     (data_wr),
+    .data_rd     (data_rd),
+    .output_data0x00(output_data0x00),
+    .output_data0x01(output_data0x01)
 );
 
 core cpu_core(
@@ -126,7 +130,8 @@ core cpu_core(
     .addr1          (addr1), 
     .addr2          (addr2),
     .result         (result), 
-    .nxt_ip         (nxt_ip),
+    //.nxt_ip         (nxt_ip),
+    .update_ip      (update_ip),
     .alu_en         (alu_en),
     .ip_update_en   (ip_update_en)
 ); 
