@@ -36,7 +36,8 @@ module core (
     output logic [DATA_WIDTH-1:0] value1, value2,
     output logic [BUS_WIDTH-1:0] addr1, addr2,
     input logic [DATA_WIDTH-1:0] result,
-    output logic alu_en
+    input logic [IP_WIDTH-1:0] nxt_ip,
+    output logic alu_en, ip_update_en
 );
 // Hardwiring section. Ignoring ram_busy from RAM
 assign instr_addr = line[31:24];
@@ -44,13 +45,12 @@ assign addr_wr    = line[23:16]; //Hardcoding bc single cycle calculation
 assign addr1      = line[15: 8];
 assign addr2      = line[ 7: 0];
 assign data_wr    = result;      //Hardcoding bc single cycle calculation
-//assign opcode_alu = opcode;
 
 logic [DATA_WIDTH-1:0] nxt_value1, nxt_value2;
 logic [BUS_WIDTH-1:0] nxt_addr_rd;
-logic [IP_WIDTH-1:0] nxt_ip;
 logic [4:0] enables, nxt_enables;
 assign {line_mem_en, instr_mem_en, ram_rd_en, ram_wr_en, alu_en} = enables;
+assign ip_update_en = (q === SWRITE);
 
 always_ff @( posedge clk, negedge rstn ) begin : nextStateAssignment
     if (!rstn) begin
@@ -65,7 +65,7 @@ always_ff @( posedge clk, negedge rstn ) begin : nextStateAssignment
         value1 <= nxt_value1;
         value2 <= nxt_value2;
         addr_rd <= nxt_addr_rd;
-        ip <= nxt_ip; //Move this to ALU for control
+        ip <= nxt_ip;
         opcode_alu <= opcode;
     end
 end
@@ -79,7 +79,7 @@ always_comb begin : nextStateLogic
         SLOAD3: nxt_enables = 5'b00101; //ram_rd
         SCALC:  nxt_enables = 5'b00101; //ram_rd, alu
         SWRITE: nxt_enables = 5'b00010; //ram_wr
-        SNXT:   nxt_enables= 5'b10000; //line_mem
+        SNXT:   nxt_enables = 5'b10000; //line_mem
         default:nxt_enables = 5'b00000; //off
     endcase
 end
@@ -88,7 +88,6 @@ end
 assign nxt_value1 = (q == SLOAD1 || q == SLOAD2) ? data_rd : value1;
 assign nxt_value2 = (q == SLOAD3 || q == SCALC) ? data_rd : value2;
 assign nxt_addr_rd = (q == SREAD) ? addr1 : (q == SLOAD2) ? addr2 : addr_rd;
-assign nxt_ip = (q == SWRITE) ? ip + 1 : ip; //Move this to ALU for control
 
 endmodule
 

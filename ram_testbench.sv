@@ -65,8 +65,4 @@ initial begin : gtkwave
     $dumpvars(1, ram_testbench);
 end
 
-
-
-
-
 endmodule 

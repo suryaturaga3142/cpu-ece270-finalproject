@@ -32,11 +32,12 @@ logic [IP_WIDTH-1:0] ip;
 logic [LINE_WIDTH-1:0] output_line; 
 
 // ALU internal signals
-logic alu_en; 
+logic alu_en, ip_update_en; 
 logic [DATA_WIDTH-1:0] val1, val2; 
 logic [BUS_WIDTH-1:0] addr1, addr2; 
 logic [OPCODE_WIDTH-1:0] opcode_alu; // Output of instruction memory 
 logic [DATA_WIDTH-1:0] result; 
+logic [IP_WIDTH-1:0] nxt_ip;
 logic calc_done;
 
 // Instruction internal memory signals
@@ -70,18 +71,20 @@ line_mem line_memory(
 ); 
 
 alu cpu_alu(
-    .clk        (clk), 
-    .rstn       (rstn), 
-    .en         (alu_en), 
-    .value1     (val1), 
-    .value2     (val2),
-    .addr1      (addr1),
-    .addr2      (addr2),
-    .opcode     (opcode_alu), 
-    .result     (result),
-    .calc_done  (calc_done), 
-    .err        (err), 
-    .finish     (finish)
+    .clk          (clk), 
+    .rstn         (rstn), 
+    .en           (alu_en),
+    .ip_update_en (ip_update_en),
+    .value1       (val1), 
+    .value2       (val2),
+    .addr1        (addr1),
+    .addr2        (addr2),
+    .opcode       (opcode_alu), 
+    .result       (result),
+    .nxt_ip       (nxt_ip),
+    .calc_done    (calc_done), 
+    .err          (err), 
+    .finish       (finish)
 );
 
 instr_mem instruction_memory(
@@ -123,7 +126,9 @@ core cpu_core(
     .addr1          (addr1), 
     .addr2          (addr2),
     .result         (result), 
-    .alu_en         (alu_en)
+    .nxt_ip         (nxt_ip),
+    .alu_en         (alu_en),
+    .ip_update_en   (ip_update_en)
 ); 
 
 endmodule
