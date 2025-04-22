@@ -53,7 +53,6 @@ logic [4:0] enables, nxt_enables;
 assign {line_mem_en, instr_mem_en, ram_rd_en, ram_wr_en, alu_en} = enables;
 
 always_ff @( posedge clk, negedge rstn ) begin : nextStateAssignment
-    //opcode_alu <= opcode;
     if (!rstn) begin
         enables <= 5'b00000;
         value1 <= 8'h00;

@@ -4,10 +4,7 @@
 `include "line_mem.sv"
 `include "alu.sv"
 `include "instr_mem.sv"
-//`include "memory_controller.sv"
-//`include "ram.sv"
-//`include "RAM_wrapper.sv"
-`include "ARCHIVED_ram.sv"
+`include "ram.sv"
 `include "core.sv"
 `ifndef cpu_guard
 `define cpu_guard
@@ -92,19 +89,8 @@ instr_mem instruction_memory(
     .en         (instr_mem_en), 
     .opcode     (opcode_instr)
 );
-/*
-RAM_wrapper ram_memory(
-    .en         (read_write_en),
-    .clk        (clk), 
-    .rstn       (rstn), 
-    .addr_rd    (addr_rd), 
-    .addr_w     (addr_wr), 
-    .dwrite     (dwrite), 
-    .dout       (dout),
-    .busy       (busy)
-); 
-*/
-ARCHIVED_ram ram_memory(
+
+ram ram_memory(
     .clk       (clk),
     .addr_rd   (addr_rd),
     .addr_wr   (addr_wr),
