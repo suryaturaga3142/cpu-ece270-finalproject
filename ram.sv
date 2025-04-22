@@ -27,11 +27,22 @@ always_ff @( posedge clk ) begin : resetAndRead
 end
 
 assign nxt_data_rd = (rd_en === 1'b1) ? memory[(1<<addr_rd)-1] : data_rd;
+
+///*
+//For Synthesis
+always @* begin
+    if (wr_en && !rd_en) memory[(1<<addr_wr)-1] = data_wr;
+end
+//*/
+
+//For simulation
+/*
 always_latch begin : writing
     if (wr_en && !rd_en) begin
         memory[(1<<addr_wr)-1] = data_wr;
     end
 end
+*/
 
 endmodule
 

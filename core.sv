@@ -37,7 +37,6 @@ module core (
     output logic [BUS_WIDTH-1:0] addr1, addr2,
     input logic [DATA_WIDTH-1:0] result,
     input logic update_ip,
-    //input logic [IP_WIDTH-1:0] nxt_ip,
     output logic alu_en, ip_update_en
 );
 // Hardwiring section. Ignoring ram_busy from RAM
@@ -78,9 +77,9 @@ always_comb begin : nextStateLogic
         SREAD:  nxt_enables = 5'b01100; //instr_mem, ram_rd
         SLOAD1: nxt_enables = 5'b00100; //ram_rd
         SLOAD2: nxt_enables = 5'b00100; //ram_rd
-        SLOAD3: nxt_enables = 5'b00101; //ram_rd, alu
+        SLOAD3: nxt_enables = 5'b00100; //ram_rd
         SCALC:  nxt_enables = 5'b00101; //ram_rd, alu
-        SWRITE: nxt_enables = { 3'b000, ~opcode[6], 1'b0 }; //ram_wr if not controlling
+        SWRITE: nxt_enables = { 3'b000, ~opcode[6], 1'b1 }; //ram_wr if not controlling, alu
         SNXT:   nxt_enables = 5'b10000; //line_mem
         default:nxt_enables = 5'b00000; //off
     endcase

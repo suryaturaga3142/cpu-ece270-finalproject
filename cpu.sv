@@ -23,7 +23,6 @@ module cpu(
 );
 
 // Synchronizer internal signals
-//logic nxt_line; 
 SequencerState q; 
 logic err, finish;
 
@@ -38,7 +37,6 @@ logic [DATA_WIDTH-1:0] val1, val2;
 logic [BUS_WIDTH-1:0] addr1, addr2; 
 logic [OPCODE_WIDTH-1:0] opcode_alu; // Output of instruction memory 
 logic [DATA_WIDTH-1:0] result; 
-//logic [IP_WIDTH-1:0] nxt_ip;
 logic calc_done, update_ip;
 
 // Instruction internal memory signals
@@ -82,7 +80,6 @@ alu cpu_alu(
     .addr2        (addr2),
     .opcode       (opcode_alu), 
     .result       (result),
-    //.nxt_ip       (nxt_ip),
     .update_ip    (update_ip),
     .calc_done    (calc_done), 
     .err          (err), 
@@ -130,7 +127,6 @@ core cpu_core(
     .addr1          (addr1), 
     .addr2          (addr2),
     .result         (result), 
-    //.nxt_ip         (nxt_ip),
     .update_ip      (update_ip),
     .alu_en         (alu_en),
     .ip_update_en   (ip_update_en)

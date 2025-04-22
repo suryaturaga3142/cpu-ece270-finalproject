@@ -28,15 +28,23 @@ assign code[4] = 32'h50080102; //beq 0x08, c, y
 assign code[5] = 32'h00000003; //add sum, sum, x
 assign code[6] = 32'h02010101; //add c, c, 1
 assign code[7] = 32'h40040000; //jump 0x04
-assign code[NUM_LINES] = 32'hffffffff;
+assign code[8] = 32'hffffffff; //end
 
+///*
+//For synthesis
+always @* begin
+    if (en) line = code[ip];
+end
+//*/
 
-assign line = code[ip];
-/*always_latch begin : lineAssignment
+//For simulation
+/*
+always_latch begin : lineAssignment
     if(en) begin
         line = code[ip];
     end
-end*/
+end
+*/
 
 endmodule
 
