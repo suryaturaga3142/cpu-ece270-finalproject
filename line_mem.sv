@@ -30,11 +30,13 @@ assign code[6] = 32'h02010101; //add c, c, 1
 assign code[7] = 32'h40040000; //jump 0x04
 assign code[NUM_LINES] = 32'hffffffff;
 
-always_latch begin : lineAssignment
+
+assign line = code[ip];
+/*always_latch begin : lineAssignment
     if(en) begin
         line = code[ip];
     end
-end
+end*/
 
 endmodule
 

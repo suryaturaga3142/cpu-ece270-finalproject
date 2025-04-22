@@ -19,12 +19,13 @@ assign mem[0] = 8'h00;
 assign mem[1] = 8'h00;
 assign mem[2] = 8'h00;
 
-always_latch begin : opcodeAssignment
+assign opcode = addr_instr;
+/*always_latch begin : opcodeAssignment
     if(en) begin
         opcode = addr_instr; //mem[addr_instr];
     end
 end
-
+*/
 endmodule
 
 `endif
