@@ -25,14 +25,14 @@ always_ff @( posedge clk, negedge rstn ) begin : nxtStateAssignment
 end
 always_comb begin : nxtStateLogic
     case (q)
-        SRST:    nxt_q = (start === 1'b1) ? SREAD : SRST;
-        SREAD:   nxt_q = SLOAD1;
-        SLOAD1:  nxt_q = SLOAD2;
-        SLOAD2:  nxt_q = SLOAD3;
-        SLOAD3:  nxt_q = SCALC;
+        SRST:    nxt_q = (start === 1'b1) ? SR1 : SRST;
+        SR1:     nxt_q = SR2;
+        SR2:     nxt_q = SR3;
+        SR3:     nxt_q = SR4;
+        SR4:     nxt_q = SCALC;
         SCALC:   nxt_q = (finish === 1'b1) ? SFINISH : (nxt_line === 1'b1) ? SWRITE : SCALC;
         SWRITE:  nxt_q = SNXT;
-        SNXT:    nxt_q = SREAD;
+        SNXT:    nxt_q = SR1;
         default: nxt_q = q; //SFINISH -> SFINISH, SERR -> SERR
     endcase
 end

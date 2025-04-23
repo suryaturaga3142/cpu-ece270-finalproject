@@ -14,24 +14,38 @@ module ram (
     input logic [DATA_WIDTH-1:0] data_wr,
     input logic rd_en, wr_en,
     output logic [DATA_WIDTH-1:0] data_rd,
-    output logic [DATA_WIDTH-1:0] output_data0x00, output_data0x01
+    output logic [DATA_WIDTH-1:0] ram0x00, ram0x01, ram0x02, ram0x03, ram0x04
 );
 
-logic [DATA_WIDTH-1:0] memory [(1<<BUS_WIDTH) - 1:0];
+logic [DATA_WIDTH-1:0] memory [(1<<BUS_WIDTH)-1:0];
 logic [DATA_WIDTH-1:0] nxt_data_rd;
-assign output_data0x00 = memory[0];
-assign output_data0x01 = memory[1];
+assign ram0x00 = memory[0];
+assign ram0x01 = memory[1];
+assign ram0x02 = memory[2];
+assign ram0x03 = memory[3];
+assign ram0x04 = memory[4];
 
 always_ff @( posedge clk ) begin : resetAndRead
     data_rd <= nxt_data_rd;
 end
 
-assign nxt_data_rd = (rd_en === 1'b1) ? memory[(1<<addr_rd)-1] : data_rd;
+assign nxt_data_rd = (rd_en === 1'b1) ? memory[addr_rd] : data_rd;
+
+/*
+//For Synthesis
+always @* begin
+    if (wr_en && !rd_en) memory[addr_wr] = data_wr;
+end
+*/
+
+//For simulation
+///*
 always_latch begin : writing
     if (wr_en && !rd_en) begin
-        memory[(1<<addr_wr)-1] = data_wr;
+        memory[addr_wr] = data_wr;
     end
 end
+//*/
 
 endmodule
 
