@@ -10,6 +10,6 @@ parameter IP_WIDTH=8;      //Length of address to a single line of code
 //parameter NUM_LINES=8;     //Number of code lines to execute
 
 // States enum for sequencer
-typedef enum logic [3:0] { SRST, SREAD, SLOAD1, SLOAD2, SLOAD3, SCALC, SWRITE, SNXT, SFINISH, SERR } SequencerState;
+typedef enum logic [3:0] { SRST, SREAD, SLOAD1, SLOAD2, SCALC, SWRITE, SNXT, SFINISH, SERR } SequencerState;
 
 `endif

@@ -19,7 +19,7 @@ module cpu(
     input logic clk, 
     input logic start, 
     input logic rstn,
-    output logic [DATA_WIDTH-1:0] output_data0x00, output_data0x01
+    output logic [DATA_WIDTH-1:0] ram0x00, ram0x01, ram0x02, ram0x03, ram0x04
 );
 
 // Synchronizer internal signals
@@ -35,14 +35,13 @@ logic [LINE_WIDTH-1:0] output_line;
 logic alu_en, ip_update_en; 
 logic [DATA_WIDTH-1:0] val1, val2; 
 logic [BUS_WIDTH-1:0] addr1, addr2; 
-logic [OPCODE_WIDTH-1:0] opcode_alu; // Output of instruction memory 
+logic [OPCODE_WIDTH-1:0] opcode;
 logic [DATA_WIDTH-1:0] result; 
 logic calc_done, update_ip;
 
 // Instruction internal memory signals
 logic [BUS_WIDTH-1:0] addr_instr; 
 logic instr_mem_en;
-logic [OPCODE_WIDTH-1:0] opcode_instr;
 
 // RAM memory internal signals
 logic [1:0] read_write_en;
@@ -78,7 +77,7 @@ alu cpu_alu(
     .value2       (val2),
     .addr1        (addr1),
     .addr2        (addr2),
-    .opcode       (opcode_alu), 
+    .opcode       (opcode), 
     .result       (result),
     .update_ip    (update_ip),
     .calc_done    (calc_done), 
@@ -89,7 +88,7 @@ alu cpu_alu(
 instr_mem instruction_memory(
     .addr_instr (addr_instr),
     .en         (instr_mem_en), 
-    .opcode     (opcode_instr)
+    .opcode     (opcode)
 );
 
 ram ram_memory(
@@ -100,8 +99,11 @@ ram ram_memory(
     .wr_en       (read_write_en[1]),
     .data_wr     (data_wr),
     .data_rd     (data_rd),
-    .output_data0x00(output_data0x00),
-    .output_data0x01(output_data0x01)
+    .ram0x00     (ram0x00),
+    .ram0x01     (ram0x01),
+    .ram0x02     (ram0x02),
+    .ram0x03     (ram0x03),
+    .ram0x04     (ram0x04)
 );
 
 core cpu_core(
@@ -111,7 +113,7 @@ core cpu_core(
     .line           (output_line), 
     .ip             (ip), 
     .line_mem_en    (line_mem_en),
-    .opcode         (opcode_instr),
+    .opcode         (opcode),
     .instr_addr     (addr_instr), 
     .instr_mem_en   (instr_mem_en), 
     .ram_busy       (busy),
@@ -121,7 +123,6 @@ core cpu_core(
     .addr_wr        (addr_wr),
     .ram_wr_en      (read_write_en[1]),
     .ram_rd_en      (read_write_en[0]),
-    .opcode_alu     (opcode_alu), 
     .value1         (val1),
     .value2         (val2),
     .addr1          (addr1), 
