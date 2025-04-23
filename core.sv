@@ -48,7 +48,7 @@ logic [DATA_WIDTH-1:0] nxt_value1, nxt_value2;
 logic [BUS_WIDTH-1:0] nxt_addr_rd, nxt_addr_wr;
 logic [IP_WIDTH-1:0] nxt_ip;
 logic [4:0] enables, nxt_enables;
-assign {line_mem_en, instr_mem_en, ram_rd_en, ram_wr_en, alu_en} = enables;
+assign {line_mem_en, instr_mem_en, ram_rd_en, alu_en, ram_wr_en} = enables;
 assign ip_update_en = (q === SWRITE);
 
 always_ff @( posedge clk, negedge rstn ) begin : nextStateAssignment
@@ -68,46 +68,26 @@ always_ff @( posedge clk, negedge rstn ) begin : nextStateAssignment
     end
 end
 
-/*always_comb begin : nextStateLogic
-    case (q)
-        SRST:   nxt_enables = 5'b10000; //line_mem
-        SREAD:  nxt_enables = 5'b01100; //instr_mem, ram_rd
-        SLOAD1: nxt_enables = 5'b00100; //ram_rd
-        SLOAD2: nxt_enables = 5'b00100; //ram_rd
-        SLOAD3: nxt_enables = 5'b00100; //ram_rd
-        SCALC:  nxt_enables = 5'b00101; //ram_rd, alu
-        SWRITE: nxt_enables = { 3'b000, ~opcode[6], 1'b1 }; //ram_wr if not controlling, alu
-        SNXT:   nxt_enables = 5'b10001; //line_mem
-        default:nxt_enables = 5'b00000; //off
-    endcase
-end*/
+assign nxt_value1 = (q == SR2) ? data_rd : value1;
+assign nxt_value2 = (q == SR3) ? data_rd : value2;
+assign nxt_addr_rd = (q == SRST || q == SNXT) ? addr1 : (q == SR1) ? addr2 : addr_rd;
+assign nxt_addr_wr = (q == SCALC) ? line[23:16] : addr_wr;
+assign nxt_ip = (q == SWRITE) ? (update_ip == 1'b1) ? addr_wr : ip + 1 : ip;
 
-always_comb begin : nextStateLogic
+always_comb begin : nxtStateLogic
     case (q)
-        SRST:   nxt_enables = 5'b10100; //line_mem
-        SREAD:  nxt_enables = 5'b01100; //instr_mem, ram_rd
-        SLOAD1: nxt_enables = 5'b00100; //ram_rd
-        SLOAD2: nxt_enables = 5'b00100; //ram_rd, alu
-        SCALC:  nxt_enables = 5'b00101; //alu
-        SWRITE: nxt_enables = { 3'b000, ~opcode[6], 1'b0 }; //ram_wr if not controlling, alu
-        SNXT:   nxt_enables = 5'b10100; //line_mem
-        default:nxt_enables = 5'b00000; //off
+        SRST: nxt_enables = 5'b10100;
+        SR1:  nxt_enables = 5'b01100;
+        SR2:  nxt_enables = 5'b00100;
+        SR3:  nxt_enables = 5'b00100;
+        SR4:  nxt_enables = 5'b00010;
+        SCALC:nxt_enables = { 4'b0001, ~opcode[6] };
+        SWRITE: nxt_enables=5'b10010;
+        SNXT :nxt_enables = 5'b10100;
+        default: nxt_enables = 5'b00000;
     endcase
 end
 
-assign nxt_addr_rd = (q == SRST || q == SNXT) ? addr1 : (q == SLOAD1) ? addr2 : addr_rd;
-assign nxt_value1 = (q == SLOAD1) ? data_rd : value1;
-assign nxt_value2 = (q == SCALC) ? data_rd : value2;
-assign nxt_addr_wr = (q == SLOAD1) ? line[23:16] : addr_wr;
-assign nxt_ip = (q == SNXT) ? (update_ip === 1'b1) ? addr_wr : ip + 1 : ip;
-
-// nextStateLogic
-/*assign nxt_value1 = (q == SLOAD1 || q == SLOAD2) ? data_rd : value1;
-assign nxt_value2 = (q == SLOAD3 || q == SCALC) ? data_rd : value2;
-assign nxt_addr_rd = (q == SREAD) ? addr1 : (q == SLOAD2) ? addr2 : addr_rd;
-assign nxt_ip = (q == SNXT) ? (update_ip === 1'b1) ? addr_wr : ip + 1 : ip;
-assign nxt_addr_wr = (q == SLOAD3) ? line[23:16] : addr_wr;
-*/
 endmodule
 
 `endif

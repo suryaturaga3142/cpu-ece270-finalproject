@@ -28,14 +28,14 @@ assign code[7] = 32'h40040000; //jump 0x04
 assign code[8] = 32'hffffffff; //end
 */
 
-assign code[0] = 32'h03000f00; //set a = 0f
-assign code[1] = 32'h03010600; //set b = 06
+assign code[0] = 32'h03006900; //set a = 0f
+assign code[1] = 32'h03010700; //set b = 06
 assign code[2] = 32'h03020000; //set gcd = 0
 assign code[3] = 32'h50090001; //beq 0x09 a, b
-assign code[4] = 32'h54070001; //bgt 0x07 a, b
-assign code[5] = 32'h04010100; //sub b, b, a
+assign code[4] = 32'h58070001; //bgt 0x07 a, b
+assign code[5] = 32'h08010100; //sub b, b, a
 assign code[6] = 32'h40030000; //jump 0x03
-assign code[7] = 32'h04000001; //sub a, a, b
+assign code[7] = 32'h08000001; //sub a, a, b
 assign code[8] = 32'h40030000; //jump 0x03
 assign code[9] = 32'h00020200; //add gcd, gcd, a
 assign code[10]= 32'hffffffff; //end

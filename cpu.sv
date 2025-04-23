@@ -73,6 +73,7 @@ alu cpu_alu(
     .rstn         (rstn), 
     .en           (alu_en),
     .ip_update_en (ip_update_en),
+    .q            (q),
     .value1       (val1), 
     .value2       (val2),
     .addr1        (addr1),
