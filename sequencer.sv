@@ -30,7 +30,7 @@ always_comb begin : nxtStateLogic
         SR2:     nxt_q = SR3;
         SR3:     nxt_q = SR4;
         SR4:     nxt_q = SCALC;
-        SCALC:   nxt_q = (finish === 1'b1) ? SFINISH : (nxt_line === 1'b1) ? SWRITE : SCALC;
+        SCALC:   nxt_q = (finish == 1'b1) ? SFINISH : (nxt_line == 1'b1) ? SWRITE : SCALC;
         SWRITE:  nxt_q = SNXT;
         SNXT:    nxt_q = SR1;
         default: nxt_q = q; //SFINISH -> SFINISH, SERR -> SERR

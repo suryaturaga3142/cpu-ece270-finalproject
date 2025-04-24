@@ -48,6 +48,7 @@ logic [DATA_WIDTH-1:0] nxt_value1, nxt_value2;
 logic [BUS_WIDTH-1:0] nxt_addr_rd, nxt_addr_wr;
 logic [IP_WIDTH-1:0] nxt_ip;
 logic [4:0] enables, nxt_enables;
+
 assign {line_mem_en, instr_mem_en, ram_rd_en, alu_en, ram_wr_en} = enables;
 assign ip_update_en = (q === SWRITE);
 

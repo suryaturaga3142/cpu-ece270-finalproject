@@ -45,15 +45,15 @@ assign code[0] = 32'h03000010; //set x = 10
 assign code[1] = 32'h03010055; //set y = 55
 assign code[2] = 32'h40000000; //jump 0x00
 */
-/*
+///*
 //For synthesis
 always @* begin
     if (en) line = code[ip];
 end
-*/
+//*/
 
 //For simulation
-///*
+/*
 always_latch begin : lineAssignment
     if(en) begin
         line = code[ip];

@@ -25,8 +25,7 @@ module alu (
 );
 logic [DATA_WIDTH-1:0] op1, op2, nxt_op1, nxt_op2, nxt_result;
 logic nxt_calc_done, nxt_update_ip;
-//assign op1 = opcode[0] ? addr1 : value1;
-//assign op2 = opcode[1] ? addr2 : value2;
+
 assign finish = opcode[7];
 assign err = 1'b0;
 
@@ -58,6 +57,7 @@ always_comb begin : arithmeticAssignment
                 3'b001: nxt_result = opcode[2] ?   op1 | op2  : op1 - op2;
                 3'b010: nxt_result = opcode[2] ? ~(op1 | op2) : op1 << op2;
                 3'b011: nxt_result = opcode[2] ?   op1 & op2  : op1 >> op2;
+                //3'b100: nxt_result = opcode[2] ? op1 ROL op2 : op1 ROR op2;
                 3'b100: nxt_result = opcode[2] ? ~(op1 & op2) : (op1 > op2)  ? 8'hff : 8'h00;
                 default:nxt_result = opcode[2] ? ~(op1 ^ op2) : (op1 == op2) ? 8'hff : 8'h00;
             endcase
