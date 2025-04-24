@@ -1,7 +1,7 @@
 `include "cpu.sv"
 
 module cpu_top (
-    input logic CLK_i,
+    input logic HWCLK,
     input logic [1:0] PB,
     output logic [7:0] RIGHT, LEFT, SS7, SS6, SS5, SS4, SS3, SS2, SS1, SS0
 );
