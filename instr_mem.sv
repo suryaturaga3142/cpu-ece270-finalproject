@@ -19,8 +19,9 @@ assign mem[0] = 8'h00;
 assign mem[1] = 8'h00;
 assign mem[2] = 8'h00;*/
 
-///*
+assign opcode = (en) ? addr_instr : 8'h00;
 //For synthesis
+/*
 always @* begin
     if (en) opcode = addr_instr;
 end

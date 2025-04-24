@@ -18,7 +18,7 @@ module ram (
 );
 
 logic [DATA_WIDTH-1:0] memory [(1<<BUS_WIDTH)-1:0];
-logic [DATA_WIDTH-1:0] nxt_data_rd;
+logic [DATA_WIDTH-1:0] nxt_data_rd, nxt_data_wr;
 assign ram0x00 = memory[0];
 assign ram0x01 = memory[1];
 assign ram0x02 = memory[2];
@@ -27,13 +27,14 @@ assign ram0x04 = memory[4];
 
 always_ff @( posedge clk ) begin : resetAndRead
     data_rd <= nxt_data_rd;
+    data_wr <= nxt_data_wr;
 end
 
 assign nxt_data_rd = (rd_en === 1'b1) ? memory[addr_rd] : data_rd;
-
+assign nxt_data_wr = (wr_en && !rd_en) ? data_wr : memory[addr_wr];
 
 //For Synthesis
-///*
+/*
 always @* begin
     if (wr_en && !rd_en) memory[addr_wr] = data_wr;
 end
