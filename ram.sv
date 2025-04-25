@@ -27,7 +27,7 @@ assign ram0x04 = memory[4];
 
 always_ff @( posedge clk ) begin : resetAndRead
     data_rd <= nxt_data_rd;
-    data_wr <= nxt_data_wr;
+    memory[addr_wr] <= nxt_data_wr;
 end
 
 assign nxt_data_rd = (rd_en === 1'b1) ? memory[addr_rd] : data_rd;
@@ -38,7 +38,7 @@ assign nxt_data_wr = (wr_en && !rd_en) ? data_wr : memory[addr_wr];
 always @* begin
     if (wr_en && !rd_en) memory[addr_wr] = data_wr;
 end
-//*/
+*/
 
 //For simulation
 /*
@@ -47,7 +47,7 @@ always_latch begin : writing
         memory[addr_wr] = data_wr;
     end
 end
-//*/
+*/
 
 endmodule
 

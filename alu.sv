@@ -57,7 +57,6 @@ always_comb begin : arithmeticAssignment
                 3'b001: nxt_result = opcode[2] ?   op1 | op2  : op1 - op2;
                 3'b010: nxt_result = opcode[2] ? ~(op1 | op2) : op1 << op2;
                 3'b011: nxt_result = opcode[2] ?   op1 & op2  : op1 >> op2;
-                //3'b100: nxt_result = opcode[2] ? op1 ROL op2 : op1 ROR op2;
                 3'b100: nxt_result = opcode[2] ? ~(op1 & op2) : (op1 > op2)  ? 8'hff : 8'h00;
                 default:nxt_result = opcode[2] ? ~(op1 ^ op2) : (op1 == op2) ? 8'hff : 8'h00;
             endcase

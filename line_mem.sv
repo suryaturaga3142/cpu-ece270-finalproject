@@ -15,6 +15,7 @@ module line_mem (
 );
 
 logic [LINE_WIDTH-1:0] code [(1<<BUS_WIDTH)-1:0];
+assign line = code[ip];
 
 /* Code to multiply 5 x 6 through repeated addition
 assign code[0] = 32'h03000000; //set sum = 0
@@ -46,13 +47,12 @@ assign code[1] = 32'h03010055; //set y = 55
 assign code[2] = 32'hf0000000; //end
 */
 
-assign line = (en) ? code[ip] : 8'hxx;
 /*
 //For synthesis
 always @* begin
     if (en) line = code[ip];
 end
-//*/
+*/
 
 //For simulation
 /*
@@ -61,7 +61,7 @@ always_latch begin : lineAssignment
         line = code[ip];
     end
 end
-//*/
+*/
 
 endmodule
 
