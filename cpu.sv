@@ -19,11 +19,12 @@ module cpu(
     input logic clk, 
     input logic start, 
     input logic rstn,
-    output logic [DATA_WIDTH-1:0] ram0x00, ram0x01, ram0x02, ram0x03, ram0x04
+    output logic [DATA_WIDTH-1:0] ram0x00, ram0x01, ram0x02, ram0x03, ram0x04,
+    output SequencerState q
 );
 
 // Synchronizer internal signals
-SequencerState q; 
+//SequencerState q; 
 logic err, finish;
 
 // Line memory internal signals

@@ -4,6 +4,7 @@ module cpu_tb;
 
 logic clk, rstn, start;
 logic [DATA_WIDTH-1:0] ram0x00, ram0x01, ram0x02, ram0x03, ram0x04;
+SequencerState q;
 
 cpu dut(
     .clk(clk),
@@ -13,7 +14,8 @@ cpu dut(
     .ram0x01     (ram0x01),
     .ram0x02     (ram0x02),
     .ram0x03     (ram0x03),
-    .ram0x04     (ram0x04)
+    .ram0x04     (ram0x04),
+    .q(q)
 );
 
 initial clk = 1'b0;

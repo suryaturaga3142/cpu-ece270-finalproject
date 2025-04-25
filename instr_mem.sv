@@ -14,12 +14,13 @@ module instr_mem (
 );
 
 logic [OPCODE_WIDTH-1:0] mem [(1<<BUS_WIDTH)-1:0];
+assign opcode = addr_instr;
+
 /*Define opcodes here
 assign mem[0] = 8'h00;
 assign mem[1] = 8'h00;
 assign mem[2] = 8'h00;*/
 
-assign opcode = addr_instr;
 //For synthesis
 /*
 always @* begin
