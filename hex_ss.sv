@@ -15,7 +15,7 @@ module hex_ss (
 always_comb begin : ssLogic
     case (hex)
         4'h0: ss = 8'h3f;
-        4'h1: ss = 8'h03;
+        4'h1: ss = 8'h06;
         4'h2: ss = 8'h5b;
         4'h3: ss = 8'h4f;
         4'h4: ss = 8'h76;
