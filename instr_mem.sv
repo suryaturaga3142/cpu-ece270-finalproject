@@ -16,26 +16,6 @@ module instr_mem (
 logic [OPCODE_WIDTH-1:0] mem [(1<<BUS_WIDTH)-1:0];
 assign opcode = addr_instr;
 
-/*Define opcodes here
-assign mem[0] = 8'h00;
-assign mem[1] = 8'h00;
-assign mem[2] = 8'h00;*/
-
-//For synthesis
-/*
-always @* begin
-    if (en) opcode = addr_instr;
-end
-*/
-
-//For simulation
-/*
-always_latch begin : opcodeAssignment
-    if(en) begin
-        opcode = addr_instr; //mem[addr_instr];
-    end
-end
-*/
 
 endmodule
 
